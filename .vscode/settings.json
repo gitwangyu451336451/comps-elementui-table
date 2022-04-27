@@ -1,0 +1,77 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.idea": true,
+        "**/.DS_Store": true
+    },
+    "files.eol": "\n",
+    "editor.detectIndentation": false,
+    "emmet.syntaxProfiles": {
+        "vue-html": "html",
+        "vue": "html"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    // "editor.defaultFormatter": "octref.vetur",
+    //每次保存后按eslint格式化
+    "eslint.run": "onType",
+    "eslint.validate": ["javascript", "vue", "html"],
+    "eslint.options": {
+        "extensions": [".js", ".vue"]
+    },
+    "vetur.validation.template": true,
+    "vetur.format.defaultFormatter.html": "prettier",
+    "vetur.format.defaultFormatter.stylus": "stylus-supremacy",
+    "vetur.format.defaultFormatter.js": "prettier",
+    "vetur.format.options.tabSize": 4,
+    "vetur.format.defaultFormatterOptions": {
+        "prettier": {
+            "semi": false, //不加分号
+            "singleQuote": true //用单引号
+        }
+    },
+    "editor.wordWrapColumn": 80,
+    "editor.lineHeight": 20,
+    "editor.fontSize": 12,
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": true,
+    "editor.formatOnType": false,
+    "files.associations": {
+        "*.vue": "vue",
+        "*.wpy": "vue",
+        "*.wxml": "html",
+        "*.wxss": "css"
+    },
+    "workbench.colorTheme": "One Dark Pro Flat",
+    "window.zoomLevel": 1,
+    // stylus插件配置
+    // "stylusSupremacy.insertColons": true, // 是否插入冒号
+    // "stylusSupremacy.insertSemicolons": false, // 是否插入分好
+    // "stylusSupremacy.insertBraces": true, // 是否插入大括号
+    // "stylusSupremacy.insertNewLineAroundImports": true, // import之后是否换行
+    // "stylusSupremacy.insertNewLineAroundBlocks": false,
+
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "vsicons.dontShowNewVersionMessage": true,
+    "gitlens.views.repositories.files.layout": "list",
+    "gitlens.advanced.abbreviatedShaLength": 7,
+    "gitlens.hovers.currentLine.over": "line",
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[stylus]": {
+        "editor.defaultFormatter": "thisismanta.stylus-supremacy"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "HookyQR.beautify"
+    }
+    // "prettier.vueIndentScriptAndStyle": true
+}

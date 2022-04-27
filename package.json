@@ -1,0 +1,54 @@
+{
+    "name": "comps-elementui-table",
+    "version": "1.0.1",
+    "description": "vue基于element-ui二次封装通用表格组件",
+    "main": "dist/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --mode=production --config ./webpack.config.js",
+        "dev": "webpack-dev-server --config ./webpack.config.dev.js --open",
+        "lint": "eslint --fix --ext .js,.vue src"
+    },
+    "author": "wangyu",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gitwangyu451336451/comps-elementui-table.git"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.16.11",
+        "babel-eslint": "^10.1.0",
+        "babel-loader": "^8.0.0-beta.0",
+        "babel-polyfill": "^6.26.0",
+        "cross-env": "^7.0.3",
+        "css-loader": "^6.7.1",
+        "element-ui": "^2.15.8",
+        "eslint": "^6.7.2",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-config-standard": "^14.1.1",
+        "eslint-plugin-html": "^6.2.0",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.0",
+        "eslint-plugin-vue": "^6.2.2",
+        "html-webpack-plugin": "^5.5.0",
+        "style-loader": "^3.3.1",
+        "terser-webpack-plugin": "^5.3.1",
+        "vue": "^2.6.11",
+        "vue-loader": "^15.9.2",
+        "vue-template-compiler": "^2.6.11",
+        "webpack": "^5.72.0",
+        "webpack-cli": "^4.9.2",
+        "webpack-dev-server": "^4.8.1",
+        "copy-webpack-plugin": "^10.2.4",
+        "webpack-node-externals": "^3.0.0"
+    },
+    "dependencies": {
+        "@babel/core": "^7.17.9"
+    },
+    "files": [
+        "dist"
+    ]
+}
