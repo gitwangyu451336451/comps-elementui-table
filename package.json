@@ -1,8 +1,9 @@
 {
     "name": "comps-elementui-table",
-    "version": "1.0.1",
-    "description": "vue基于element-ui二次封装通用表格组件",
+    "version": "1.0.4",
+    "description": "vue基于element-ui二次封装通用表格组件,第三方依赖组件取消打包,需插件引用项目手动引入",
     "main": "dist/index.js",
+    "unpkg": "dist/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack --mode=production --config ./webpack.config.js",
@@ -15,6 +16,9 @@
         "type": "git",
         "url": "https://github.com/gitwangyu451336451/comps-elementui-table.git"
     },
+    "peerDependencies": {
+        "element-ui": "^2.15.8"
+    },
     "devDependencies": {
         "@babel/preset-env": "^7.16.11",
         "babel-eslint": "^10.1.0",
@@ -22,7 +26,6 @@
         "babel-polyfill": "^6.26.0",
         "cross-env": "^7.0.3",
         "css-loader": "^6.7.1",
-        "element-ui": "^2.15.8",
         "eslint": "^6.7.2",
         "eslint-config-prettier": "^6.11.0",
         "eslint-config-standard": "^14.1.1",

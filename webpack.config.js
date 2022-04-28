@@ -11,17 +11,17 @@ module.exports = {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, './dist'),
-        library: {
-            type: 'commonjs-static',
-        },
+        library: 'compsElementTable',
+        libraryTarget: 'umd',
+        globalObject: 'this',
         clean: true,
     },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
-        alias: {
-            '@': path.resolve(__dirname, './src'),
-        },
-    },
+    // resolve: {
+    //     extensions: ['.tsx', '.ts', '.js'],
+    //     alias: {
+    //         '@': path.resolve(__dirname, './src'),
+    //     },
+    // },
     plugins: [
         // new CopyPlugin({
         //     patterns: [
@@ -49,16 +49,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader'],
-            },
-            {
-                test: /\.less$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'postcss-loader',
-                    'less-loader',
-                ],
+                use: ['style-loader', 'css-loader'],
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
@@ -84,10 +75,13 @@ module.exports = {
         ],
     },
     externalsPresets: { node: true },
-    externals: [
-        nodeExternals({
-            allowlist: [],
-        }),
-    ],
+    externals: {
+        'element-ui': {
+            commonjs: 'element-ui',
+            commonjs2: 'element-ui',
+            amd: 'element-ui',
+            root: '_',
+        },
+    },
     plugins: [new VueLoaderPlugin()],
 }
