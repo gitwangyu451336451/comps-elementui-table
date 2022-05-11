@@ -1,6 +1,6 @@
 {
     "name": "comps-elementui-table",
-    "version": "1.0.4",
+    "version": "2.0.0",
     "description": "vue基于element-ui二次封装通用表格组件,第三方依赖组件取消打包,需插件引用项目手动引入",
     "main": "dist/index.js",
     "unpkg": "dist/index.js",
@@ -16,16 +16,25 @@
         "type": "git",
         "url": "https://github.com/gitwangyu451336451/comps-elementui-table.git"
     },
+    "keywords": [
+        "vue",
+        "element-ui",
+        "table"
+    ],
     "peerDependencies": {
-        "element-ui": "^2.15.8"
+        "element-ui": "^2.15.8",
+        "vue": "2.5.22"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.16.11",
+        "axios": "0.24.0",
         "babel-eslint": "^10.1.0",
         "babel-loader": "^8.0.0-beta.0",
         "babel-polyfill": "^6.26.0",
+        "copy-webpack-plugin": "^10.2.4",
         "cross-env": "^7.0.3",
         "css-loader": "^6.7.1",
+        "element-ui": "^2.15.8",
         "eslint": "^6.7.2",
         "eslint-config-prettier": "^6.11.0",
         "eslint-config-standard": "^14.1.1",
@@ -37,19 +46,22 @@
         "eslint-plugin-standard": "^4.0.0",
         "eslint-plugin-vue": "^6.2.2",
         "html-webpack-plugin": "^5.5.0",
+        "mockjs": "^1.1.0",
+        "sass": "^1.51.0",
+        "sass-loader": "^12.6.0",
         "style-loader": "^3.3.1",
         "terser-webpack-plugin": "^5.3.1",
         "vue": "^2.6.11",
         "vue-loader": "^15.9.2",
         "vue-template-compiler": "^2.6.11",
-        "webpack": "^5.72.0",
+        "webpack": "^5.72.1",
         "webpack-cli": "^4.9.2",
         "webpack-dev-server": "^4.8.1",
-        "copy-webpack-plugin": "^10.2.4",
         "webpack-node-externals": "^3.0.0"
     },
     "dependencies": {
-        "@babel/core": "^7.17.9"
+        "@babel/core": "^7.17.9",
+        "webpack-bundle-analyzer": "^4.5.0"
     },
     "files": [
         "dist"

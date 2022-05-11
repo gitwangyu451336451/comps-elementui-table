@@ -2,7 +2,7 @@
  * @Author       : 王宇
  * @desc         : 组件描述
  * @Date         : 2022-04-27 11:59:27
- * @LastEditTime : 2022-04-28 10:29:34
+ * @LastEditTime : 2022-05-10 11:33:47
  * @LastEditors  : 王宇
  * @FilePath     : \vue-element-table\testumd.html
 -->
@@ -23,14 +23,18 @@
         <el-dialog :visible.sync="visible" title="Hello world">
             <p>Try Element</p>
         </el-dialog>
+        <div id="comtable"></div>
         <com-table :tabAttr="tabAttr" ref="comTable" class="mt16"></com-table>
     </div>
 
 </body>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+<script src="https://unpkg.com/vue@2.6.14"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<script src="https://unpkg.com/comps-elementui-table@1.0.4/dist/index.js"></script>
+
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/comps-elementui-table@1.0.4/dist/index.js"></script> -
+<!-- <script src="dist/index.js"></script> -->
 <script>
     new Vue({
         el: '#app',
@@ -104,7 +108,75 @@
             }
         }
     })
-    // console.log(compsElementTable)
+    // const tabAttr = {
+    //     source: {
+    //         type: 'remote',
+    //         url: '',
+    //         params: {
+    //             spotCheckId: ''
+    //         },
+    //         tableData: {
+    //             tableList: [],
+    //         },
+    //     },
+    //     cols: [{
+    //             title: '异常状态',
+    //             key: 'yczt',
+    //             render: (h, p) => {
+    //                 return h('span', [p.yczt || '--'])
+    //             },
+    //         },
+    //         {
+    //             title: '流水号',
+    //             key: 'lsh'
+    //         },
+    //         {
+    //             title: '检验流水号',
+    //             key: 'jylsh'
+    //         },
+    //         {
+    //             title: '检测线代号',
+    //             key: 'jcxdh'
+    //         },
+    //         {
+    //             title: '安检机构编码',
+    //             key: 'jyjgbh'
+    //         },
+    //         {
+    //             title: '检验类别',
+    //             key: 'jylb'
+    //         },
+    //         {
+    //             title: '上线标记',
+    //             key: 'sxbj'
+    //         },
+    //         {
+    //             title: '号牌号码',
+    //             key: 'hphm'
+    //         },
+    //         {
+    //             title: '号牌种类',
+    //             key: 'hpzl'
+    //         },
+    //         {
+    //             title: '中文品牌',
+    //             key: 'clpp1'
+    //         },
+    //         {
+    //             title: '车辆型号',
+    //             key: 'clxh'
+    //         },
+    //         {
+    //             title: '车辆类型',
+    //             key: 'cllx'
+    //         },
+    //     ],
+    // }
+    // const dom = document.getElementById('app')
+    // new compsElementTable.default({
+    //     el: dom,
+    //     tabAttr: tabAttr
+    // })
 </script>
 
 </html>

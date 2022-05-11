@@ -2,25 +2,29 @@
  * @Author       : 王宇
  * @desc         : 组件描述
  * @Date         : 2022-01-19 11:00:20
- * @LastEditTime : 2022-04-26 15:26:54
+ * @LastEditTime : 2022-05-11 10:57:40
  * @LastEditors  : 王宇
- * @FilePath     : \vue-element-table\src\com-table.vue
+ * @FilePath     : \vue-element-table\src\table.vue
 -->
 <template>
     <div class="com-table">
+        {{ rowKey }}
         <el-table
             :data="tableData"
-            :stripe="tabAttr.stripe !== false"
-            :row-key="tabAttr.rowKey"
-            :max-height="tabAttr.maxHeight"
+            :stripe="stripe !== false"
+            :row-key="getRowKey"
+            :max-height="maxHeight"
             v-loading="loading"
-            border
-            :sum-text="tabAttr.summary && tabAttr.summary.sumText"
-            :show-summary="tabAttr.summary && tabAttr.summary.showSummary"
-            :spanMethod="tabAttr.summary && tabAttr.summary.objectSpanMethod"
-            :summary-method="tabAttr.summary && tabAttr.summary.summaryMethod"
-            :tree-props="tabAttr.treeProps"
-            :size="tabAttr.size || 'medium'"
+            :border="border"
+            :sum-text="summaryConf.summary ? summaryConf.sumText : ''"
+            :show-summary="summaryConf.summary && summaryConf.showSummary"
+            :spanMethod="
+                summaryConf.summary ? summaryConf.objectSpanMethod : null
+            "
+            :summary-method="
+                summaryConf.summary ? summaryConf.summaryMethod : null
+            "
+            :size="size || 'medium'"
             ref="mytable"
             @select-all="selectAll"
             @selection-change="handleSelectionChange"
@@ -29,7 +33,7 @@
             style="width: 100%"
         >
             <el-table-column
-                v-if="tabAttr.showIndex"
+                v-if="showIndex"
                 label="序号"
                 type="index"
                 width="60"
@@ -38,11 +42,11 @@
                     {{ (pageNum - 1) * pageSize + scope.$index + 1 }}
                 </template>
             </el-table-column>
-            <template v-for="(item, i) in tabAttr.cols">
+            <template v-for="(item, i) in cols">
                 <el-table-column
                     type="selection"
                     :key="'col' + i"
-                    v-if="item.showSelect"
+                    v-if="item.isSelect"
                     :reserve-selection="item.reserveSelection"
                     :selectable="item.checkSelectable"
                     width="55"
@@ -55,7 +59,7 @@
                     :width="item.width"
                     :type="item.expand"
                     :formatter="item.formatter"
-                    :show-overflow-tooltip="tabAttr.showOverflowTooltip"
+                    :show-overflow-tooltip="showOverflowTooltip"
                     :sortable="item.sortable"
                     :fixed="item.fixed"
                     :render-header="item.renderHeader"
@@ -82,7 +86,7 @@
                 >
                     <template slot-scope="scope">
                         <component
-                            :is="'mytablecol'"
+                            :is="'tablecol'"
                             :render="item.render"
                             :index="scope.$index"
                             :tableData="tableData"
@@ -94,22 +98,22 @@
             </template>
             <slot name="empty-content" slot="empty"> </slot>
         </el-table>
-        <div class="mt10 fl">
+        <div class="com-table-tooltipBl">
             <slot name="tooltipBL"></slot>
         </div>
         <slot name="bottom"></slot>
         <el-pagination
             background
             class="pagination"
-            v-if="!hidePagination"
-            :pager-count="tabAttr.pagerCount"
+            v-if="pagination.show"
+            :pager-count="pagination.pagerCount"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="pageNum"
             :page-sizes="pageSizes"
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
+            :total="compTotal"
         >
         </el-pagination>
         <div style="clear: both"></div>
@@ -117,96 +121,125 @@
 </template>
 
 <script>
-import mytablecol from './com-table-col.vue'
+import tablecol from './table-col.vue'
 export default {
     props: {
-        tabAttr: {
+        // 大小
+        size: {
+            type: String,
+            default: 'medium',
+        },
+        // 分页配置
+        pagination: {
             type: Object,
             default: () => {
                 return {
-                    // table的大小
-                    summary: {
-                        sumText: '',
-                        showSummary: '',
-                        objectSpanMethod: () => {},
-                        summaryMethod: () => {},
-                    },
-                    size: 'medium',
-                    // 是否显示pagination
-                    hidePagination: false,
-                    // 是否合计
-                    showSummary: false,
-                    showOverflowTooltip: true,
+                    show: true,
                     // 分页参数
                     pageSize: 0,
                     pagerCount: 5,
-                    rowKey: '', // 行数据的 Key，用来优化 Table 的渲染
-                    treeProps: {}, // 渲染嵌套数据的配置选项
-                    source: {
-                        type: 'remote', // remote远程数据,static静态数据，
-                        reqType: 'get',
-                        url: '', // type==remote时启用
-                        params: '', // type==remote时启用
-                        tableData: {
-                            // type==static时配置
-                            // rows: 0, // 总数
-                            tableList: [], // 静态数据 selfDef属性-是否自定义列内容
-                        },
-                    },
-                    showSelect: false, // 是否显示选择框
-                    showIndex: false, // 是否显示序号
-                    // 搜索框配置
-                    searchCof: {
-                        showSearch: true,
-                        searchData: [], // { type: '',key:'',list:[] } type===select,list存在,type===text,list不存在
-                    },
-                    cols: [], // 列表属性参考element-ui
-                    // 配置 iSearch 是否是搜索字段
-                    // 合并单元格自定义函数
-                    objectSpanMethod: null,
                 }
             },
         },
+        // 是否显示边框
+        border: {
+            type: Boolean,
+            default: true,
+        },
+        // 请求配置
+        opts: {
+            type: Object,
+            default: () => {
+                return {
+                    dataType: 'remote',
+                    type: 'get',
+                    url: '',
+                    params: '',
+                    tableList: [],
+                }
+            },
+        },
+        // // 是否显示选择框
+        // showSelect: {
+        //     type: Boolean,
+        //     default: false,
+        // },
+        // 是否显示序号
+        showIndex: {
+            type: Boolean,
+            default: false,
+        },
+        // 列属性配置
+        cols: {
+            type: Array,
+            default: () => {
+                return []
+            },
+        },
+        // 是否显示斑马线
+        stripe: {
+            type: Boolean,
+            default: true,
+        },
+        // table最大高度
+        maxHeight: {
+            type: String || Number,
+        },
+        // 列超出时，显示tooltip
+        showOverflowTooltip: {
+            type: Boolean,
+            default: true,
+        },
+        // 合计配置
+        summaryConf: {
+            type: Object,
+            default: () => {
+                return {
+                    summary: false,
+                    sumText: '',
+                    showSummary: '',
+                    objectSpanMethod: () => {},
+                    summaryMethod: () => {},
+                }
+            },
+        },
+        rowKey: {
+            type: String || Function,
+        },
+        getRowKey: {
+            type: Function,
+        },
     },
-    name: 'comTable',
+    name: 'compTable',
     data() {
         return {
             loading: false,
-            hidePagination: false,
             pageNum: 1,
             pageSize: 10,
             pageSizes: [10, 20, 30, 40],
-            searchText: '',
-            select: '',
             localData: [],
             total: 0,
-            // 搜索字段
-            searchData: [],
-            // 当前选择的参数
-            nowSelectParam: null,
-            key: 1,
-            orderField: '',
-            orderWay: '',
-            // 静态数据
-            tableList: [],
         }
     },
     computed: {
+        compTotal() {
+            if (this.opts.dataType === 'static') {
+                return this.opts.tableList.length
+            } else {
+                return this.total
+            }
+        },
         tableData() {
             //  静态数据
-            if (this.tabAttr.source.type === 'static') {
-                if (!this.hidePagination) {
-                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-                    this.total = this.tabAttr.source.tableData.tableList.length
-                    return this.tabAttr.source.tableData.tableList
+            if (this.opts.dataType === 'static') {
+                if (!this.pagination.show) {
+                    return this.opts.tableList
                 } else {
-                    const arr = this.tabAttr.source.tableData.tableList.filter(
-                        (item, i) => {
-                            const max = this.pageNum * this.pageSize
-                            const min = (this.pageNum - 1) * this.pageSize
-                            return i + 1 <= max && i + 1 > min
-                        }
-                    )
+                    const arr = this.opts.tableList.filter((item, i) => {
+                        const max = this.pageNum * this.pageSize
+                        const min = (this.pageNum - 1) * this.pageSize
+                        return i + 1 <= max && i + 1 > min
+                    })
                     return arr
                 }
                 // 远程数据
@@ -216,8 +249,8 @@ export default {
         },
         // 数据总数
         dataRows() {
-            if (this.tabAttr.source.type === 'static') {
-                return this.tabAttr.source.tableData.tableList.length
+            if (this.opts.dataType === 'static') {
+                return this.opts.tableList.length
             } else {
                 return this.localData[0].total
             }
@@ -226,37 +259,27 @@ export default {
     created() {
         // 初始化配置
         this.initConfig()
-        if (this.tabAttr.source.type !== 'static') {
+        if (this.opts.dataType !== 'static') {
             this.getData()
         } else {
-            this.total = this.tabAttr.source.tableData.tableList.length
-            this.tableList = JSON.parse(
-                JSON.stringify(this.tabAttr.source.tableData.tableList)
-            )
-            // this.$nextTick(() => {
-            //     this.toggleSelection()
-            //     this.toggleSelectionByData()
-            // })
+            this.total = this.opts.tableList.length
+            // this.tableList = JSON.parse(JSON.stringify(this.opts.tableList))
         }
     },
-    mounted() {},
-    watch: {},
     methods: {
         /**
          * @description: 初始化配置
          */
         initConfig() {
-            this.hidePagination = this.tabAttr.hidePagination
             // 设置分页大小
-            !!this.tabAttr.pageSize &&
-                (this.pageSize = this.tabAttr.pageSize) &&
-                this.pageSizes.push(this.tabAttr.pageSize)
+            !!this.pagination.pageSize &&
+                (this.pageSize = this.pagination.pageSize) &&
+                this.pageSizes.push(this.pagination.pageSize)
         },
         /**
          * @description: 改变页容量
          */
         handleSizeChange(val) {
-            // console.log(`每页 ${val} 条`)
             this.pageSize = val
             this.pageNum = 1
             this.getData()
@@ -267,7 +290,6 @@ export default {
         handleCurrentChange(val) {
             this.pageNum = val
             this.pageSize = 10
-            // console.log(`当前页: ${val}`)
             this.getData()
         },
         /**
@@ -298,60 +320,40 @@ export default {
          * @description: 排序数据
          * @param {*} column
          */
-        sortChange(column) {
-            if (column.order && column.order === 'descending') {
-                this.orderField = column.prop
-                this.orderWay = 'DESC'
-            } else if (column.order && column.order === 'ascending') {
-                this.orderField = column.prop
-                this.orderWay = 'ASC'
-            } else {
-                this.orderField = ''
-                this.orderWay = ''
-            }
-            this.getData()
+        sortChange({ order, prop }) {
+            this.getData({ order, prop })
         },
         /**
          * @description: 获取动态数据
          * @param {*} p
          */
         getData(p) {
-            if (!this.tabAttr.source.url) {
+            if (!this.opts.url) {
                 return
             }
             this.loading = true
             const param = Object.assign(
                 { pageSize: this.pageSize, pageNum: this.pageNum },
-                this.tabAttr.source.params,
+                this.opts.params,
                 p
             )
-
-            if (this.orderField !== '' && this.orderField != null) {
-                param.orderField = this.orderField
-                param.orderWay = this.orderWay
-            }
-            if (this.tabAttr.source.type === 'static') {
-                const data = JSON.parse(
-                    JSON.stringify(this.tabAttr.source.tableData.tableList)
-                )
-                this.tableList = data.filter((item) => {
+            if (this.opts.dataType === 'static') {
+                const data = JSON.parse(JSON.stringify(this.opts.tableList))
+                this.localData = data.filter((item) => {
                     let s = true
                     Object.keys(param).forEach((r) => {
                         item[r] && item[r].indexOf(param[r]) < 0 && (s = false)
                     })
                     return s
                 })
-                this.total = this.tableList.length
-                this.$emit('searchData', this.tableList)
+                this.total = this.localData.length
                 this.loading = false
-                // this.toggleSelection()
-                // this.toggleSelectionByData()
                 return
             }
             return new Promise((resolve) => {
                 const p = Object.assign({ params: param })
                 this.$axios
-                    .get(this.tabAttr.source.url, p)
+                    .get(this.opts.url, p)
                     .then((res) => {
                         if (
                             res.content &&
@@ -368,9 +370,6 @@ export default {
                         this.$emit('getData', this.localData, this.total)
 
                         this.$nextTick(() => {
-                            ++this.key
-                            // this.toggleSelection()
-                            // this.toggleSelectionByData()
                             this.$emit('afterGetData', this.localData)
                         })
                         resolve(this.localData)
@@ -384,19 +383,28 @@ export default {
          * @description: 刷新
          */
         refresh(p) {
-            if (this.tabAttr.source.type === 'static') {
-                this.total = this.tabAttr.source.tableData.tableList.length
-                this.tableList = JSON.parse(
-                    JSON.stringify(this.tabAttr.source.tableData.tableList)
-                )
-                ++this.key
+            if (this.opts.dataType === 'static') {
+                this.localData = JSON.parse(JSON.stringify(this.opts.tableList))
             } else {
                 return this.getData(p)
             }
         },
     },
     components: {
-        mytablecol,
+        tablecol,
     },
 }
 </script>
+
+<style scoped lang="scss">
+.com-table {
+    &-tooltipBl {
+        margin-top: 10px;
+        float: left;
+    }
+    .pagination {
+        float: right;
+        margin-top: 10px;
+    }
+}
+</style>

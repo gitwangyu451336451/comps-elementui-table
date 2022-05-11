@@ -2,26 +2,20 @@
  * @Author       : 王宇
  * @desc         : 通用表格组件
  * @Date         : 2019-11-05 14:44:52
- * @LastEditTime : 2022-04-27 16:01:19
+ * @LastEditTime : 2022-05-10 17:09:23
  * @LastEditors  : 王宇
  * @FilePath     : \vue-element-table\src\index.js
  */
-import comTableComp from './com-table.vue'
-// import elementUi from 'element-ui'
-// import 'element-ui/lib/theme-chalk/table.css'
-// import 'element-ui/lib/theme-chalk/table-column.css'
-// import 'element-ui/lib/theme-chalk/pagination.css'
-var comTable = {
+import table from './table.vue'
+var compTable = {
     install: function (Vue, options) {
-        Vue.component(comTableComp.name, comTableComp)
-        // console.log(elementUi)
-        // Vue.use(elementUi)
-        // Vue.use(TableColumn)
-        // Vue.use(Pagination)
-        // Vue.directive('Loading', Loading)
+        // 为表格添加请求对象
+        // eslint-disable-next-line no-param-reassign
+        Vue.prototype.$axios = options.axios
+        Vue.component(table.name, table)
     },
 }
-if (typeof window !== 'undefined' && window.Vue) {
-    window.Vue.use(comTable)
+if (typeof window !== 'undefined' && window.Vue && window.$axios) {
+    window.Vue.use(compTable, { axios: window.$axios })
 }
-export default comTable
+export default compTable
