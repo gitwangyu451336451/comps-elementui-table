@@ -2,16 +2,16 @@
  * @Author       : 王宇
  * @desc         : 组件描述
  * @Date         : 2022-04-25 17:35:14
- * @LastEditTime : 2022-05-11 10:51:02
+ * @LastEditTime : 2022-05-11 11:03:24
  * @LastEditors  : 王宇
- * @FilePath     : \vue-element-table\src\app.vue
+ * @FilePath     : \vue-element-table\src\example\app.vue
 -->
 
 <template>
     <div id="app">
         <p>动态数据</p>
         <comp-table
-            :getRowKey="getRowKey"
+            :rowKey="'lsh'"
             :cols="cols"
             :opts="opts"
             ref="comTable"
@@ -19,7 +19,7 @@
         ></comp-table>
         <p>静态数据</p>
         <comp-table
-            :getRowKey="getRowKey"
+            :rowKey="'lsh'"
             style="margin-top: 10px"
             :cols="cols"
             :opts="opts1"

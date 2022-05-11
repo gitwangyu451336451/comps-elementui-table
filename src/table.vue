@@ -2,17 +2,16 @@
  * @Author       : 王宇
  * @desc         : 组件描述
  * @Date         : 2022-01-19 11:00:20
- * @LastEditTime : 2022-05-11 10:57:40
+ * @LastEditTime : 2022-05-11 11:04:09
  * @LastEditors  : 王宇
  * @FilePath     : \vue-element-table\src\table.vue
 -->
 <template>
     <div class="com-table">
-        {{ rowKey }}
         <el-table
             :data="tableData"
             :stripe="stripe !== false"
-            :row-key="getRowKey"
+            :row-key="rowKey"
             :max-height="maxHeight"
             v-loading="loading"
             :border="border"
@@ -159,11 +158,6 @@ export default {
                 }
             },
         },
-        // // 是否显示选择框
-        // showSelect: {
-        //     type: Boolean,
-        //     default: false,
-        // },
         // 是否显示序号
         showIndex: {
             type: Boolean,
@@ -205,9 +199,6 @@ export default {
         },
         rowKey: {
             type: String || Function,
-        },
-        getRowKey: {
-            type: Function,
         },
     },
     name: 'compTable',
@@ -263,7 +254,6 @@ export default {
             this.getData()
         } else {
             this.total = this.opts.tableList.length
-            // this.tableList = JSON.parse(JSON.stringify(this.opts.tableList))
         }
     },
     methods: {
